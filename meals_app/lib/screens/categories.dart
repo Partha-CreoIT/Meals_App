@@ -17,14 +17,19 @@ class CategoriesScreen extends StatefulWidget {
 }
 
 class _CategoriesScreenState extends State<CategoriesScreen> {
-  void fetchCat() async{
-    final db = DBHelper();
+  final db = DBHelper();
+
+  fetchCat() async {
     final categories = await db.getAllCategories();
     print(categories);
+    return categories;
   }
 
-
-
+  @override
+  void initState() {
+    super.initState();
+    fetchCat();
+  }
 
   void _selectCategory(BuildContext context, Category category) {
     final filteredMeals = dummyMeals
@@ -40,22 +45,32 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return GridView(
-      padding: const EdgeInsets.all(24),
-      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: 3 / 2,
-        crossAxisSpacing: 20.0,
-        mainAxisSpacing: 20.0,
-      ),
-      children: [
-        for (final category in availableCategories)
-          CategoryGridItem(
-              category: category,
-              onSelect: () {
-                _selectCategory(context, category);
-              })
-      ],
+    return FutureBuilder(
+      future: fetchCat(),
+      builder: (BuildContext context,snapshot) {
+        if (snapshot.hasData) {
+          return GridView(
+            padding: const EdgeInsets.all(24),
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              childAspectRatio: 3 / 2,
+              crossAxisSpacing: 20.0,
+              mainAxisSpacing: 20.0,
+            ),
+            children: [
+              for (final category in availableCategories)
+                CategoryGridItem(
+                    category: category,
+                    onSelect: () {
+                      _selectCategory(context, category);
+                    })
+            ],
+          );
+        }
+        return Container(
+          child: CircularProgressIndicator(),
+        );
+      },
     );
   }
 }

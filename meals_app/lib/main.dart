@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:meals_app/screens/tab_screen.dart';
+import 'package:meals_app/services/database_helper.dart';
 
 final theme = ThemeData(
   useMaterial3: true,
@@ -13,8 +14,13 @@ final theme = ThemeData(
 );
 
 void main() {
+  DBHelper db = DBHelper();
+  db.getDatabase();
   runApp(const App());
+
+
 }
+
 
 class App extends StatelessWidget {
   const App({super.key});

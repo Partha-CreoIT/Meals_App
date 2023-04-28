@@ -17,10 +17,12 @@ class TabsScreen extends StatefulWidget {
 }
 
 class _TabsScreenState extends State<TabsScreen> {
-  void fetchCat() async {
-    final db = DBHelper();
+  final db = DBHelper();
+
+   fetchCat() async {
     final categories = await db.getAllCategories();
     print(categories);
+    return categories;
   }
 
   @override
