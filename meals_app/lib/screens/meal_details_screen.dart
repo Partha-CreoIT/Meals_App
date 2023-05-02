@@ -1,9 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
+import '../controller/meal_detail_controller.dart';
 import '../models/meal.dart';
+import '../services/database_helper.dart';
 
 class MealDetailScreen extends StatelessWidget {
-  const MealDetailScreen({super.key, required this.meal , required this.onToggleFavorite});
+  final MealsController mealsController = Get.put(MealsController());
+  final db = DBHelper();
+
+  MealDetailScreen(
+      {super.key, required this.meal, required this.onToggleFavorite});
 
   final Meal meal;
   final void Function(Meal meal) onToggleFavorite;
@@ -16,7 +23,7 @@ class MealDetailScreen extends StatelessWidget {
         actions: [
           IconButton(
             onPressed: () {
-              onToggleFavorite(meal);
+              mealsController.updateMeal();
             },
             icon: const Icon(Icons.favorite_sharp),
           ),
@@ -40,7 +47,6 @@ class MealDetailScreen extends StatelessWidget {
                   color: Theme.of(context).colorScheme.primary,
                   fontWeight: FontWeight.bold),
               textAlign: TextAlign.start,
-
             ),
             const SizedBox(
               height: 14,

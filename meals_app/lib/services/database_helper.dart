@@ -3,6 +3,7 @@ import 'package:meals_app/models/category.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import '../data/dummy_data.dart';
+import '../models/meal.dart';
 
 class DBHelper {
   static Database? _database;
@@ -21,7 +22,7 @@ class DBHelper {
         'CREATE TABLE category(id TEXT PRIMARY KEY, title TEXT)',
       );
       await db.execute(
-        'CREATE TABLE meal(id TEXT PRIMARY KEY, categories TEXT, title TEXT, affordability TEXT, complexity TEXT,imageUrl TEXT,duration INTEGER, ingredients TEXT, steps TEXT, isGlutenFree INTEGER, isLactoseFree INTEGER, isVegan INTEGER, isVegetarian INTEGER)',
+        'CREATE TABLE meal(id TEXT PRIMARY KEY, categories TEXT, title TEXT, affordability TEXT, complexity TEXT,imageUrl TEXT,duration INTEGER, ingredients TEXT, steps TEXT, isGlutenFree INTEGER, isLactoseFree INTEGER, isVegan INTEGER, isVegetarian INTEGER , isFavorite INTEGER)',
       );
       await insertDummyData(db);
     });
@@ -51,6 +52,7 @@ class DBHelper {
           'isVegan': meal.isVegan ? 1 : 0,
           'isVegetarian': meal.isVegetarian ? 1 : 0,
           'isLactoseFree': meal.isLactoseFree ? 1 : 0,
+          'isFavorite': meal.isFavorite ? 1 : 0,
         });
       }
     });
@@ -93,6 +95,17 @@ class DBHelper {
       },
     );
   }
+  
+  Future<void> updateMealFavorite(String id, bool isFavorite) async {
+    final db = await getDatabase();
+    await db.update(
+      'meal',
+      {'isFavorite': isFavorite ? 1 : 0},
+      where: 'id = ?',
+      whereArgs: [id],
+    );
+  }
+
 
   Future<Map<String, dynamic>?> getCategoryById(String id) async {
     final db = await getDatabase();

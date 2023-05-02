@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-enum  Filter { glutenFree, lactoseFree, vegetarian, vegan }
+enum Filter { glutenFree, lactoseFree, vegetarian, vegan }
 
 class FilterScreen extends StatefulWidget {
   const FilterScreen({super.key});
@@ -21,7 +21,7 @@ class _FilterScreen extends State<FilterScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title:  Text('Your Filters'),
+        title: Text('Your Filters'),
       ),
       body: WillPopScope(
         onWillPop: () async {

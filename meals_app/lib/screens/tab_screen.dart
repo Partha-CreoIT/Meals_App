@@ -3,7 +3,7 @@ import 'package:meals_app/screens/filter_screen.dart';
 import 'package:meals_app/screens/meals.dart';
 import 'package:meals_app/widgets/main_drawer.dart';
 
-import '../controller/controller_category.dart';
+import '../controller/meal_detail_controller.dart';
 import '../models/meal.dart';
 import '../services/database_helper.dart';
 import 'categories.dart';
@@ -21,6 +21,7 @@ class _TabsScreenState extends State<TabsScreen> {
   final db = DBHelper();
 
   final List<Meal> _favoriteMeal = [];
+
 
   void _showInfoMessage(String message) {
     ScaffoldMessenger.of(context).clearSnackBars();
@@ -65,10 +66,8 @@ class _TabsScreenState extends State<TabsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final controller1 =
-        MyController1(onToggleMealFavorite: _toggleMealFavoriteStatus);
     Widget activePage = CategoriesScreen(
-      onToggleFavorite: controller1.onToggleMealFavorite,
+      onToggleFavorite: _toggleMealFavoriteStatus,
     );
     var activePageTitle = 'Categories';
 
@@ -76,7 +75,7 @@ class _TabsScreenState extends State<TabsScreen> {
       activePage = MealsScreen(
         meals: _favoriteMeal,
         title: '',
-        onToggleFavorite: controller1.onToggleMealFavorite,
+        onToggleFavorite: _toggleMealFavoriteStatus,
       );
       activePageTitle = 'Your Favorites';
     }

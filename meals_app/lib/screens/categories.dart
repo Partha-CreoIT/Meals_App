@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:meals_app/controller/category_controller.dart';
+import 'package:meals_app/controller/meal_detail_controller.dart';
 
 import '../data/dummy_data.dart';
 import '../models/meal.dart';
@@ -18,12 +19,8 @@ class CategoriesScreen extends StatefulWidget {
 
 class _CategoriesScreenState extends State<CategoriesScreen> {
   final MyController controller = Get.put(MyController());
+  final MealsController mealsController = Get.put(MealsController());
   final db = DBHelper();
-
-  fetchCat() async {
-    final categories = await db.getAllCategories();
-    return categories;
-  }
 
   @override
   Widget build(BuildContext context) {
