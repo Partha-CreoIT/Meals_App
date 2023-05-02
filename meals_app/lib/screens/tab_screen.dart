@@ -19,18 +19,6 @@ class TabsScreen extends StatefulWidget {
 class _TabsScreenState extends State<TabsScreen> {
   final db = DBHelper();
 
-   fetchCat() async {
-    final categories = await db.getAllCategories();
-    print(categories);
-    return categories;
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    fetchCat();
-  }
-
   final List<Meal> _favoriteMeal = [];
 
   void _showInfoMessage(String message) {

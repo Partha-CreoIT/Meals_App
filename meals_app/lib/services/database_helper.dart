@@ -2,7 +2,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:meals_app/models/category.dart';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
-
 import '../data/dummy_data.dart';
 
 class DBHelper {
@@ -81,9 +80,18 @@ class DBHelper {
 
   }
 
-  Future<List<Map<String, dynamic>>> getAllCategories() async {
-    final db = await getDatabase();
-    return await db.query('category');
+  Future<List<Category>> getAllCategories() async {
+    final database = await getDatabase();
+    final List<Map<String, dynamic>> maps = await database!.query('category');
+    return List.generate(
+      maps.length,
+          (index) {
+        return Category(
+          id: maps[index]['id'],
+          title: maps[index]['title'],
+        );
+      },
+    );
   }
 
   Future<Map<String, dynamic>?> getCategoryById(String id) async {
