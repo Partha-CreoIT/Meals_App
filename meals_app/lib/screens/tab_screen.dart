@@ -3,6 +3,7 @@ import 'package:meals_app/screens/filter_screen.dart';
 import 'package:meals_app/screens/meals.dart';
 import 'package:meals_app/widgets/main_drawer.dart';
 
+import '../controller/controller_category.dart';
 import '../models/meal.dart';
 import '../services/database_helper.dart';
 import 'categories.dart';
@@ -27,7 +28,7 @@ class _TabsScreenState extends State<TabsScreen> {
         .showSnackBar(SnackBar(content: Text(message)));
   }
 
-  void _toggleMealFavoriteStatus(Meal meal) {
+  void _toggleMealFavoriteStatus(Meal meal) async {
     final isExisting = _favoriteMeal.contains(meal);
 
     if (isExisting) {
@@ -64,8 +65,10 @@ class _TabsScreenState extends State<TabsScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final controller1 =
+        MyController1(onToggleMealFavorite: _toggleMealFavoriteStatus);
     Widget activePage = CategoriesScreen(
-      onToggleFavorite: _toggleMealFavoriteStatus,
+      onToggleFavorite: controller1.onToggleMealFavorite,
     );
     var activePageTitle = 'Categories';
 
@@ -73,7 +76,7 @@ class _TabsScreenState extends State<TabsScreen> {
       activePage = MealsScreen(
         meals: _favoriteMeal,
         title: '',
-        onToggleFavorite: _toggleMealFavoriteStatus,
+        onToggleFavorite: controller1.onToggleMealFavorite,
       );
       activePageTitle = 'Your Favorites';
     }

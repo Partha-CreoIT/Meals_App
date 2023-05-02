@@ -16,7 +16,7 @@ class MealsScreen extends StatelessWidget {
   final List<Meal> meals;
   final void Function(Meal meal) onToggleFavorite;
 
-  void selectedMeal(BuildContext context, Meal meal) {
+  void selectedMeal(Meal meal) {
     Get.to(
       () => MealDetailScreen(
         meal: meal,
@@ -51,7 +51,7 @@ class MealsScreen extends StatelessWidget {
         itemBuilder: (ctx, index) => MealItem(
             meal: meals[index],
             onSelectMeal: (meal) {
-              selectedMeal(context, meal);
+              selectedMeal(meal);
             }),
       );
     }
