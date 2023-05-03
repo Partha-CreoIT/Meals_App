@@ -28,7 +28,6 @@ class MyController extends GetxController {
     Get.to(() => MealsScreen(
           title: category.title,
           meals: filteredMeals,
-          onToggleFavorite: (Meal meal) {},
         ));
   }
 }

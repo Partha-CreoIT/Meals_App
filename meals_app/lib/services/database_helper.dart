@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/cupertino.dart';
 import 'package:meals_app/models/category.dart';
 import 'package:path/path.dart';
@@ -42,8 +44,14 @@ class DBHelper {
           'id': meal.id,
           'categories': meal.categories.join(','),
           'title': meal.title,
-          'affordability': meal.affordability.toString().split('.').last,
-          'complexity': meal.complexity.toString().split('.').last,
+          'affordability': meal.affordability
+              .toString()
+              .split('.')
+              .last,
+          'complexity': meal.complexity
+              .toString()
+              .split('.')
+              .last,
           'imageUrl': meal.imageUrl,
           'duration': meal.duration,
           'ingredients': meal.ingredients.join(','),
@@ -79,7 +87,6 @@ class DBHelper {
   Future<int> deleteMeal(String id) async {
     final db = await getDatabase();
     return await db.delete('meal', where: 'id = ?', whereArgs: [id]);
-
   }
 
   Future<List<Category>> getAllCategories() async {
@@ -95,10 +102,34 @@ class DBHelper {
       },
     );
   }
-  
-  Future<void> updateMealFavorite(String id, bool isFavorite) async {
+
+  Future<List<Meal>> getMeal() async {
+    final database = await getDatabase();
+    final List<Map<String, dynamic>> res= await database.rawQuery("SELECT * FROM meal WHERE isFavorite = 1");
+    return List.generate(res.length, (index) {
+      return Meal(
+        id: res[index]['id'],
+        isFavorite: res[index]['isFavorite'] == 1,
+        categories: [],
+        title: res[index]['title'],
+        imageUrl: res[index]['imageUrl'],
+        ingredients: [],
+        steps: [],
+        duration: 30,
+        complexity : Complexity.challenging,
+        affordability: Affordability.affordable,
+        isGlutenFree: false,
+        isLactoseFree: false,
+        isVegan: false,
+        isVegetarian: false,
+      );
+    });
+  }
+
+
+  Future<int> updateMealFavorite(String id, bool isFavorite) async {
     final db = await getDatabase();
-    await db.update(
+    return await db.update(
       'meal',
       {'isFavorite': isFavorite ? 1 : 0},
       where: 'id = ?',

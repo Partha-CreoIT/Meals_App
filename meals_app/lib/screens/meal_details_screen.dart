@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+
 import '../controller/meal_detail_controller.dart';
 import '../models/meal.dart';
 import '../services/database_helper.dart';
@@ -22,8 +23,9 @@ class MealDetailScreen extends StatelessWidget {
         title: Text(meal.title),
         actions: [
           IconButton(
-            onPressed: () {
-              mealsController.updateMeal();
+            onPressed: () async {
+                  await mealsController.availableMeals;
+
             },
             icon: const Icon(Icons.favorite_sharp),
           ),

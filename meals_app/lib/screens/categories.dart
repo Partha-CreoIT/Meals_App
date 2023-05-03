@@ -9,9 +9,9 @@ import '../services/database_helper.dart';
 import '../widgets/category_grid_item.dart';
 
 class CategoriesScreen extends StatefulWidget {
-  const CategoriesScreen({super.key, required this.onToggleFavorite});
+  const CategoriesScreen({super.key});
 
-  final void Function(Meal meal) onToggleFavorite;
+
 
   @override
   State<CategoriesScreen> createState() => _CategoriesScreenState();
@@ -19,7 +19,6 @@ class CategoriesScreen extends StatefulWidget {
 
 class _CategoriesScreenState extends State<CategoriesScreen> {
   final MyController controller = Get.put(MyController());
-  final MealsController mealsController = Get.put(MealsController());
   final db = DBHelper();
 
   @override
@@ -47,13 +46,15 @@ class _CategoriesScreenState extends State<CategoriesScreen> {
                     )
                 ],
               );
-            } else {
+            }
+            else {
               return const Center(
                 child: Text('No categories found.'),
               );
             }
           },
         ),
+
       ),
     );
   }

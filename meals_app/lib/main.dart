@@ -27,6 +27,6 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GetMaterialApp(theme: theme, home: const TabsScreen());
+    return GetMaterialApp(theme: theme, home:  TabsScreen());
   }
 }
