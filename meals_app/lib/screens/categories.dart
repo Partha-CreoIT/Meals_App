@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:meals_app/controller/category_controller.dart';
-import 'package:meals_app/controller/meal_detail_controller.dart';
+
 
 import '../data/dummy_data.dart';
-import '../models/meal.dart';
+
 import '../services/database_helper.dart';
 import '../widgets/category_grid_item.dart';
 

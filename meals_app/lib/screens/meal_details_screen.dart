@@ -2,13 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 
-import '../controller/meal_detail_controller.dart';
+import '../controller/favorite_detail_controller.dart';
 import '../models/meal.dart';
 import '../services/database_helper.dart';
 
-class MealDetailScreen extends StatelessWidget {
-  final MealsController mealsController = Get.put(MealsController());
-  final db = DBHelper();
+class MealDetailScreen extends StatefulWidget {
 
   MealDetailScreen(
       {super.key, required this.meal, required this.onToggleFavorite});
@@ -17,17 +15,32 @@ class MealDetailScreen extends StatelessWidget {
   final void Function(Meal meal) onToggleFavorite;
 
   @override
+  State<MealDetailScreen> createState() => _MealDetailScreenState();
+}
+
+class _MealDetailScreenState extends State<MealDetailScreen> {
+  final FavoriteMealController mealsController = Get.put(FavoriteMealController());
+
+  final db = DBHelper();
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(meal.title),
+        title: Text(widget.meal.title),
         actions: [
           IconButton(
+            icon: Icon(
+                widget.meal.isFavorite ? Icons.favorite : Icons.favorite_border,
+                color: Colors.red),
             onPressed: () async {
-                  await mealsController.availableMeals;
+              bool newFavoriteValue = !widget.meal.isFavorite;
+              await db.updateMealFavorite(widget.meal.id, newFavoriteValue);
+              widget.meal.isFavorite = newFavoriteValue;
+              setState(() {
 
+              });
             },
-            icon: const Icon(Icons.favorite_sharp),
           ),
         ],
       ),
@@ -35,7 +48,7 @@ class MealDetailScreen extends StatelessWidget {
         child: Column(
           children: [
             Image.network(
-              meal.imageUrl,
+              widget.meal.imageUrl,
               height: 300,
               width: double.infinity,
               fit: BoxFit.cover,
@@ -53,7 +66,7 @@ class MealDetailScreen extends StatelessWidget {
             const SizedBox(
               height: 14,
             ),
-            for (final ingredient in meal.ingredients)
+            for (final ingredient in widget.meal.ingredients)
               Text(
                 ingredient,
                 style: Theme.of(context).textTheme.bodyMedium!.copyWith(
@@ -71,7 +84,7 @@ class MealDetailScreen extends StatelessWidget {
             const SizedBox(
               height: 14,
             ),
-            for (final steps in meal.steps)
+            for (final steps in widget.meal.steps)
               Padding(
                 padding:
                     const EdgeInsets.symmetric(vertical: 12, horizontal: 8),

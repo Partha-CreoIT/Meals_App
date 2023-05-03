@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import '../controller/meal_detail_controller.dart';
+import '../controller/favorite_detail_controller.dart';
 import '../models/meal.dart';
 import '../services/database_helper.dart';
 import 'categories.dart';
 
 class TabsScreen extends StatefulWidget {
-  TabsScreen({super.key});
+  const TabsScreen({super.key});
 
   @override
   State<TabsScreen> createState() {
@@ -16,7 +16,8 @@ class TabsScreen extends StatefulWidget {
 }
 
 class _TabsScreenState extends State<TabsScreen> {
-  final MealsController mealsController = Get.put(MealsController());
+  final FavoriteMealController mealsController =
+      Get.put(FavoriteMealController());
   final db = DBHelper();
   int _selectedPageIndex = 0;
   String _pageTitle = 'Categories';
@@ -32,13 +33,23 @@ class _TabsScreenState extends State<TabsScreen> {
     switch (pageIndex) {
       case 0:
         return const CategoriesScreen();
+
       case 1:
+        mealsController.getFavoriteMeals();
         return Obx(() {
           final List<Meal> favoriteMeals = mealsController.availableMeals;
 
           if (favoriteMeals.isEmpty) {
-            return const Center(
-              child: Text('No favorite meals.'),
+            return  Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const [
+                  Text('No favorite meals.' , style: TextStyle(color: Colors.white  ,fontSize: 18 , ),),
+                  SizedBox(height: 20,),
+                  Text('Try To Add Some Meals.' , style: TextStyle(color: Colors.white  ,fontSize: 18 , ),),
+                ],
+              ),
+
             );
           }
 
@@ -54,11 +65,6 @@ class _TabsScreenState extends State<TabsScreen> {
                   style: const TextStyle(color: Colors.white),
                 ),
                 subtitle: Text(meal.categories.join(', ')),
-                trailing: IconButton(
-                    icon: Icon(meal.isFavorite
-                        ? Icons.favorite
-                        : Icons.favorite_border ,  color: Colors.red ),
-                    onPressed: () => mealsController.getFavoriteMeals()),
               );
             },
           );
@@ -72,7 +78,9 @@ class _TabsScreenState extends State<TabsScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(_pageTitle),
+        title: Text(
+          _pageTitle,
+        ),
       ),
       body: _buildPageContent(_selectedPageIndex),
       bottomNavigationBar: BottomNavigationBar(

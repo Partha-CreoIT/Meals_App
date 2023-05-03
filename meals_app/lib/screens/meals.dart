@@ -1,15 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:meals_app/controller/meal_detail_controller.dart';
+import 'package:meals_app/controller/favorite_detail_controller.dart';
 import 'package:meals_app/screens/meal_details_screen.dart';
 import 'package:meals_app/widgets/meal_item.dart';
 
 import '../models/meal.dart';
 import '../services/database_helper.dart';
 
-class MealsScreen extends StatelessWidget {
-  final MealsController controller = Get.put(MealsController());
-  final db = DBHelper();
+class MealsScreen extends StatefulWidget {
 
    MealsScreen(
       {super.key,
@@ -19,6 +17,15 @@ class MealsScreen extends StatelessWidget {
 
   final String? title;
   final List<Meal> meals;
+
+  @override
+  State<MealsScreen> createState() => _MealsScreenState();
+}
+
+class _MealsScreenState extends State<MealsScreen> {
+  final FavoriteMealController controller = Get.put(FavoriteMealController());
+
+  final db = DBHelper();
 
   void selectedMeal(Meal meal) {
     Get.to(
@@ -51,24 +58,24 @@ class MealsScreen extends StatelessWidget {
         ],
       ),
     );
-    if (meals.isNotEmpty) {
+    if (widget.meals.isNotEmpty) {
       content = ListView.builder(
-        itemCount: meals.length,
+        itemCount: widget.meals.length,
         itemBuilder: (ctx, index) => MealItem(
-            meal: meals[index],
+            meal: widget.meals[index],
             onSelectMeal: (meal) {
               selectedMeal(meal);
             }),
       );
     }
 
-    if (title == null) {
+    if (widget.title == null) {
       return content;
     }
 
     return Scaffold(
         appBar: AppBar(
-          title: Text(title!),
+          title: Text(widget.title!),
         ),
         body: content);
   }
